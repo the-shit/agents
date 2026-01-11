@@ -27,7 +27,7 @@ class AgentStatusService
     {
         $status = $this->getStatus($kit);
 
-        if (!$status) {
+        if (! $status) {
             return;
         }
 
@@ -48,7 +48,7 @@ class AgentStatusService
     {
         $status = $this->getStatus($kit);
 
-        if (!$status) {
+        if (! $status) {
             return;
         }
 

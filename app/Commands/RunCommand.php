@@ -17,7 +17,7 @@ class RunCommand extends Command
         $kit = $this->argument('kit');
         $task = $this->option('task');
 
-        if (!$kit) {
+        if (! $kit) {
             $kit = $this->choice(
                 'Select agent kit to run',
                 ['architect', 'implementer', 'tester', 'reviewer'],
@@ -27,8 +27,9 @@ class RunCommand extends Command
 
         $config = config("agents.kits.{$kit}");
 
-        if (!$config) {
+        if (! $config) {
             $this->error("Unknown agent kit: {$kit}");
+
             return self::FAILURE;
         }
 
@@ -38,16 +39,18 @@ class RunCommand extends Command
         if ($task) {
             $this->task("Executing task: {$task}", function () use ($kit, $task, $statusService) {
                 $statusService->executeTask($kit, $task);
+
                 return true;
             });
         } else {
-            $this->task("Executing all pending tasks", function () use ($kit, $statusService) {
+            $this->task('Executing all pending tasks', function () use ($kit, $statusService) {
                 $statusService->executeAll($kit);
+
                 return true;
             });
         }
 
-        $this->info("Agent work completed");
+        $this->info('Agent work completed');
 
         return self::SUCCESS;
     }

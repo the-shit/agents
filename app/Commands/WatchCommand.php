@@ -16,7 +16,7 @@ class WatchCommand extends Command
     {
         $kit = $this->argument('kit');
 
-        if (!$kit) {
+        if (! $kit) {
             $kit = $this->choice(
                 'Select agent kit to monitor',
                 ['architect', 'implementer', 'tester', 'reviewer'],
@@ -29,8 +29,9 @@ class WatchCommand extends Command
 
         $status = $statusService->getStatus($kit);
 
-        if (!$status) {
+        if (! $status) {
             $this->warn("No active deployment for '{$kit}' agent kit");
+
             return self::FAILURE;
         }
 
@@ -39,7 +40,7 @@ class WatchCommand extends Command
             [
                 ['Kit', $kit],
                 ['Status', $status['status']],
-                ['Progress', $status['progress'] . '%'],
+                ['Progress', $status['progress'].'%'],
                 ['Started', $status['started_at']],
                 ['Tasks Completed', $status['completed_tasks']],
                 ['Tasks Pending', $status['pending_tasks']],

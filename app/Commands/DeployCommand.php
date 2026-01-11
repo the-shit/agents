@@ -16,7 +16,7 @@ class DeployCommand extends Command
     {
         $kit = $this->argument('kit');
 
-        if (!$kit) {
+        if (! $kit) {
             $kit = $this->choice(
                 'Select agent kit to deploy',
                 ['architect', 'implementer', 'tester', 'reviewer'],
@@ -26,13 +26,15 @@ class DeployCommand extends Command
 
         $config = config("agents.kits.{$kit}");
 
-        if (!$config) {
+        if (! $config) {
             $this->error("Unknown agent kit: {$kit}");
+
             return self::FAILURE;
         }
 
         $this->task("Deploying {$kit} agent swarm", function () use ($kit, $config, $statusService) {
             $statusService->deploy($kit, $config);
+
             return true;
         });
 
