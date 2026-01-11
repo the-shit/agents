@@ -21,17 +21,21 @@ class ContainerStatusCommand extends Command
         try {
             $container = $client->getContainer($containerId);
 
+            // Handle both daemon response formats
+            $id = $container['container_id'] ?? $container['id'] ?? $containerId;
+            $task = $container['agent_name'] ?? $container['task'] ?? '-';
+
             $this->newLine();
-            $this->info("Container: {$container['id']}");
+            $this->info("Container: {$id}");
             $this->newLine();
 
             $this->table(
                 ['Property', 'Value'],
                 [
-                    ['ID', $container['id']],
-                    ['Repository', $container['repo']],
-                    ['Task', $container['task'] ?? '-'],
-                    ['Status', $this->formatStatus($container['status'])],
+                    ['ID', $id],
+                    ['Repository', $container['repo'] ?? '-'],
+                    ['Task', $task],
+                    ['Status', $this->formatStatus($container['status'] ?? 'unknown')],
                     ['Exit Code', $container['exit_code'] ?? '-'],
                     ['Created', $container['created_at'] ?? '-'],
                     ['Completed', $container['completed_at'] ?? '-'],

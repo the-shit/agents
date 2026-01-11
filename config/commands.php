@@ -40,7 +40,11 @@ return [
     */
 
     'add' => [
-        //
+        App\Commands\ContainerSpawnCommand::class,
+        App\Commands\ContainerListCommand::class,
+        App\Commands\ContainerStatusCommand::class,
+        App\Commands\ContainerKillCommand::class,
+        App\Commands\ContainerLogsCommand::class,
     ],
 
     /*

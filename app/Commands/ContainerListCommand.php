@@ -30,13 +30,16 @@ class ContainerListCommand extends Command
                 return self::SUCCESS;
             }
 
+            // Handle both wrapped and unwrapped responses
+            $list = $containers['containers'] ?? $containers;
+
             $rows = array_map(fn (array $container) => [
-                $this->truncate($container['id'], 12),
-                $container['repo'],
-                $this->truncate($container['task'] ?? '', 30),
-                $this->formatStatus($container['status']),
+                $this->truncate($container['container_id'] ?? $container['id'] ?? '-', 12),
+                $container['repo'] ?? '-',
+                $this->truncate($container['agent_name'] ?? $container['task'] ?? '', 30),
+                $this->formatStatus($container['status'] ?? 'unknown'),
                 $container['created_at'] ?? '-',
-            ], $containers);
+            ], $list);
 
             $this->table(
                 ['ID', 'Repository', 'Task', 'Status', 'Created'],
@@ -44,7 +47,7 @@ class ContainerListCommand extends Command
             );
 
             $this->newLine();
-            $this->line(sprintf('Total: %d container(s)', count($containers)));
+            $this->line(sprintf('Total: %d container(s)', count($list)));
 
             return self::SUCCESS;
         } catch (ContainerDaemonException $e) {
