@@ -45,6 +45,9 @@ class ContainerSpawnCommand extends Command
         try {
             $container = $client->spawnContainer($repo, $task, $branch, $timeout);
 
+            // Handle both daemon response formats
+            $id = $container['container_id'] ?? $container['id'] ?? 'unknown';
+
             $this->newLine();
             $this->info('Container spawned successfully!');
             $this->newLine();
@@ -52,11 +55,11 @@ class ContainerSpawnCommand extends Command
             $this->table(
                 ['Property', 'Value'],
                 [
-                    ['ID', $container['id']],
-                    ['Repository', $container['repo']],
+                    ['ID', $id],
+                    ['Repository', $container['repo'] ?? $repo],
                     ['Branch', $branch ?? 'main'],
                     ['Task', mb_substr($task, 0, 50).(mb_strlen($task) > 50 ? '...' : '')],
-                    ['Status', $container['status']],
+                    ['Status', $container['status'] ?? 'running'],
                 ]
             );
 
