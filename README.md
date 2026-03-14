@@ -227,7 +227,85 @@ for kit in architect implementer tester reviewer; do
 done
 ```
 
-## Configuration
+## Code Vectorization
+
+Built-in code vectorization for semantic search without external AI dependencies.
+
+### Index Your Codebase
+
+```bash
+# Index current directory
+agents vectorize index
+
+# Index specific path
+agents vectorize index --path=/path/to/project
+
+# View index stats
+agents vectorize stats
+```
+
+### Search Code
+
+```bash
+# Keyword search
+agents vectorize search --query="user authentication"
+
+# List all symbols
+agents vectorize symbols
+
+# Filter by type
+agents vectorize symbols --type=class
+```
+
+### Claude Code Integration (MCP)
+
+Wire directly into Claude Code via Model Context Protocol:
+
+```bash
+# Start MCP server
+agents mcp:serve
+
+# The command outputs configuration for Claude Code settings.json
+```
+
+Add to your Claude Code `settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "agents-vectorization": {
+      "command": "agents",
+      "args": ["mcp:serve"]
+    }
+  }
+}
+```
+
+Claude Code can then use these tools:
+- `search_code` - Semantic code search
+- `list_symbols` - List classes, functions, etc.
+- `get_context` - Get context around a location
+- `index_stats` - View index statistics
+
+### Configuration
+
+Vectorization is configured in `config/vectorization.php`:
+
+```php
+return [
+    'driver' => 'file',  // file, sqlite, redis
+    'chunking' => [
+        'strategy' => 'symbol',  // symbol, line, semantic
+        'max_lines' => 100,
+    ],
+    'patterns' => [
+        'include' => ['*.php', '*.js', '*.ts', '*.py'],
+        'exclude' => ['vendor/*', 'node_modules/*'],
+    ],
+];
+```
+
+## Agent Configuration
 
 Agent kits are configured in `config/agents.php`:
 

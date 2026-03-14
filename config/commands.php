@@ -45,6 +45,8 @@ return [
         App\Commands\ContainerStatusCommand::class,
         App\Commands\ContainerKillCommand::class,
         App\Commands\ContainerLogsCommand::class,
+        App\Commands\VectorizeCommand::class,
+        App\Commands\McpServeCommand::class,
     ],
 
     /*
